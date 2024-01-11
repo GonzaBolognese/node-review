@@ -5,9 +5,9 @@
   "main": "1.http.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev1": "nodemon ./clase-2/1.http.js",
-    "dev2": "nodemon ./clase-2/2.routing.js",
-    "dev3": "nodemon ./clase-2/3.express.js"
+    "dev1": "nodemon ./2.express-basic/1.http.js",
+    "dev2": "nodemon ./2.express-basic/2.routing.js",
+    "dev3": "nodemon ./2.express-basic/3.express.js"
   },
   "keywords": [],
   "author": "",
