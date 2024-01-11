@@ -1,4 +1,4 @@
-### Recuperar info del pokemon ditto
+### Recuperar info del pokemon dittovich
 GET http://localhost:1234/pokemon/ditto
 
 ### Crear un pokemon
