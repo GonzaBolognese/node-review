@@ -9,13 +9,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/movies', (req, res) => {
-  if (Object.keys(req.query).length === 0) {
-    res.status(200).json(moviesJSON)
-  } else {
-    const { genre } = req.query
-    const listGenre = moviesJSON.filter((m) => m.genre.includes(genre))
-    res.status(200).json(listGenre)
-  }
+  const { genre } = req.query
+  const listGenre = moviesJSON.filter((m) => m.genre.includes(genre))
+  listGenre.length !== 0 ? res.status(200).json(listGenre) : res.status(200).json(moviesJSON)
 })
 
 app.get('/movies/:id', (req, res) => {
