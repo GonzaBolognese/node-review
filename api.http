@@ -14,3 +14,39 @@ Content-Type: application/json
         ]
 
 }
+
+### Recuperar todas las peliculas
+GET http://localhost:3000/movies
+
+### Recuperar pelicula por id
+GET http://localhost:3000/movies/1
+
+### Recuperar todas las peliculas por genero
+GET http://localhost:3000/movies?genre=drama
+
+###Crear una pelicula con POST
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+    "sql": "SELECT * FROM users",
+    "title": "MUCHACHOS",
+    "year": 2023,
+    "director": "Jesus Braceras",
+    "duration": 108,
+    "poster": "https://static.cinemarkhoyts.com.ar/Images/Posters/db41322b95ba8a3922a701287db086e2.jpg?v=00002265",
+    "genre": [
+        "Documental",
+        "Action"
+    ],
+    "rate":9.6
+}
+###
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+    "title": 4,
+    "year": "mil 9 veitidos"
+    
+}
