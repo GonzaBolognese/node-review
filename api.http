@@ -19,7 +19,7 @@ Content-Type: application/json
 GET http://localhost:3000/movies
 
 ### Recuperar pelicula por id
-GET http://localhost:3000/movies/1
+GET http://localhost:3000/movies/6a360a18-c645-4b47-9a7b-2a71babbf3e0
 
 ### Recuperar todas las peliculas por genero
 GET http://localhost:3000/movies?genre=drama
@@ -41,12 +41,21 @@ Content-Type: application/json
     ],
     "rate":9.6
 }
-###
+###Probar un error con POST
 POST http://localhost:3000/movies
 Content-Type: application/json
 
 {
     "title": 4,
-    "year": "mil 9 veitidos"
-    
+    "year": "mil 9 veitidos"    
+}
+
+### Actualizar una pelicula por id
+
+PATCH http://localhost:3000/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+Content-Type: application/json
+
+{
+    "duration":140,
+    "year": 1973
 }

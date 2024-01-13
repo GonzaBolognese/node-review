@@ -1,16 +1,30 @@
 const express = require('express')
 const crypto = require('node:crypto')
+const cors = require('cors')
 const moviesJSON = require('./movies.json')
-const { validateMovie } = require('./schemas/movies')
+const { validateMovie, validatePartialMovie } = require('./schemas/movies')
 
 const app = express()
 app.disable('x-powered-by')
-
 app.use(express.json())
+app.use(cors({
+  origin: (origin, callback) => {
+    const ACCEPTED_ORIGINS = [
+      'http://localhost:8080',
+      'http://localhost:3000',
+      'https://gonzalo-bolognese.vercel.app/'
+    ]
+    if (ACCEPTED_ORIGINS.includes(origin)) {
+      return callback(null, true)
+    }
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hola Mundo' })
-})
+    if (!origin) {
+      return callback(null, true)
+    }
+
+    return callback(new Error('Not allowed by CORS'))
+  }
+}))
 
 app.get('/movies', (req, res) => {
   const { genre } = req.query
@@ -23,7 +37,9 @@ app.get('/movies', (req, res) => {
 
 app.get('/movies/:id', (req, res) => {
   const { id } = req.params
-  res.status(200).json(moviesJSON[id - 1])
+  const movie = moviesJSON.find(movie => movie.id === id)
+  if (movie) return res.json(movie)
+  res.status(404).json({ message: 'Movie not found' })
 })
 
 app.post('/movies', (req, res) => {
@@ -37,11 +53,46 @@ app.post('/movies', (req, res) => {
     ...result.data
   }
 
-  // Esto hace que no sea REST, porque estamos guardando
-  // El estado de la aplicación en memoria
   moviesJSON.push(newMovie)
 
   res.status(201).json(newMovie)
+})
+
+app.delete('/movies/:id', (req, res) => {
+  const { id } = req.params
+  const movieIndex = moviesJSON.findIndex(m => m.id === id)
+
+  if (movieIndex < 0) {
+    return res.status(404).json({ message: 'Movie not found' })
+  }
+
+  moviesJSON.splice(movieIndex, 1)
+
+  return res.json({ message: 'Movie deleted' })
+})
+
+app.patch('/movies/:id', (req, res) => {
+  const result = validatePartialMovie(req.body)
+
+  if (result.error) {
+    res.status(400).json({ message: JSON.parse(result.error.message) })
+  }
+
+  const { id } = req.params
+  const movieIndex = moviesJSON.findIndex(m => m.id === id)
+
+  if (movieIndex < 0) {
+    return res.status(400).json({ message: 'Movie not found' })
+  }
+
+  const updateMovie = {
+    ...moviesJSON[movieIndex],
+    ...result.data
+  }
+
+  moviesJSON[movieIndex] = updateMovie
+
+  return res.json(updateMovie)
 })
 
 const PORT = process.env.PORT ?? 3000

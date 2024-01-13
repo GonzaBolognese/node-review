@@ -11,7 +11,7 @@ const movieSchema = z.object({
     required_error: 'Director name is required'
   }),
   duration: z.number().int().min(1).max(600),
-  rate: z.number().min(0).max(10),
+  rate: z.number().min(0).max(10).default(5),
   poster: z.string().url({
     message: 'Poster must be a valid URL'
   }),
@@ -24,10 +24,15 @@ const movieSchema = z.object({
   )
 })
 
-function validateMovie (object) {
-  return movieSchema.safeParse(object)
+function validateMovie (input) {
+  return movieSchema.safeParse(input)
+}
+
+function validatePartialMovie (input) {
+  return movieSchema.partial().safeParse(input)
 }
 
 module.exports = {
-  validateMovie
+  validateMovie,
+  validatePartialMovie
 }
